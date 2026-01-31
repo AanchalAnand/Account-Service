@@ -63,9 +63,7 @@ public class AccountsServiceImpl implements AccountsInterface {
         Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
                 () -> new ResourceNotFoundException("Customer not found")
         );
-//        if(!customer.isPresent()) {
-//
-//        }
+
         Long customerId = customer.getCustomerId();
         Accounts accountDetails = accountsRepository.findByCustomerId(customerId).orElseThrow(
                 () -> new ResourceNotFoundException("Account not found")
@@ -74,4 +72,46 @@ public class AccountsServiceImpl implements AccountsInterface {
         customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accountDetails, new AccountsDto()));
         return customerDto;
     }
+
+    @Override
+    public boolean updateAccount(CustomerDto customerDto) {
+        boolean isUpdated = false;
+
+        AccountsDto accountsDto = customerDto.getAccountsDto();
+
+        if(accountsDto != null){
+            Accounts accounts = accountsRepository.findById(accountsDto.getAccountNumber()).orElseThrow(
+                    () -> new ResourceNotFoundException("Account not found")
+            );
+            AccountsMapper.maptToAccounts(accountsDto, accounts);
+            accounts =  accountsRepository.save(accounts);
+
+            Long customerId = accounts.getCustomerId();
+            Customer customer = customerRepository.findById(customerId).orElseThrow(
+                    () -> new ResourceNotFoundException("Customer not found")
+            );
+
+            CustomerMapper.mapToCustomer(customerDto, customer);
+            customerRepository.save(customer);
+            isUpdated = true;
+
+
+        }
+        return isUpdated;
+    }
+
+    @Override
+    public boolean deleteCustomer(String mobileNumber) {
+
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Customer not found")
+        );
+        Long customerId = customer.getCustomerId();
+        accountsRepository.deleteById(customerId);
+        customerRepository.deleteById(customerId);
+
+        return true;
+    }
+
+
 }

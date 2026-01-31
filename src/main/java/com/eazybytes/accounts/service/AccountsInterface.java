@@ -7,4 +7,8 @@ public interface AccountsInterface {
      void createAccount(CustomerDto customerDto);
 
      CustomerDto getAccountDetails(String mobileNumber);
+
+     boolean updateAccount(CustomerDto customerDto);
+
+     boolean deleteCustomer(String mobileNumber);
 }

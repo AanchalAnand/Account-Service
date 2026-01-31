@@ -34,4 +34,15 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDto> handleException(Exception exception, WebRequest request) {
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                request.getDescription(false),
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

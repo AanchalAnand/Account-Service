@@ -1,10 +1,9 @@
 package com.eazybytes.accounts.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
+
 
 @Data
-@AllArgsConstructor
 public class AccountsDto {
     private Long accountNumber;
     private String accountType;
