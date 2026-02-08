@@ -4,21 +4,24 @@ import com.eazybytes.accounts.constants.AccountsConstants;
 import com.eazybytes.accounts.dto.CustomerDto;
 import com.eazybytes.accounts.dto.ResponseDto;
 import com.eazybytes.accounts.service.AccountsInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@Validated
 public class AccountController {
 
     @Autowired
      AccountsInterface accountsInterface;
 
     @PostMapping("/createAccount")
-    public ResponseEntity<ResponseDto> createAccount(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
 
             accountsInterface.createAccount(customerDto);
             return ResponseEntity
@@ -32,7 +35,7 @@ public class AccountController {
         }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseDto> updateAccounts(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<ResponseDto> updateAccounts(@Valid @RequestBody CustomerDto customerDto) {
 
         boolean isUpdated = accountsInterface.updateAccount(customerDto);
         if(isUpdated) {
